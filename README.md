@@ -1,57 +1,22 @@
 # Codex 5h Limit Starter
 
-An experimental tool that sends a small Codex prompt after your five-hour usage allowance refreshes. The aim is to start the next window automatically, so it may reset sooner when you return.
+Automatically send a small Codex prompt after your five-hour allowance refreshes, to start the next window sooner.
 
-## How it works
+## Install and run
 
-1. Reads your Codex usage and reset time.
-2. Sleeps until 30 seconds after the reset, then checks again.
-3. If the five-hour allowance shows 100% remaining, sends “Reply OK.” Otherwise, waits for the next reset.
-4. Reuses a dedicated Codex session for later prompts.
-
-It waits if your weekly allowance is exhausted and retries usage checks after errors. Each prompt consumes some allowance and counts toward your weekly limit. It won't send if the reported credit status is uncertain or credits are available.
-
-**Experimental:** The behavior immediately after a real reset and session reuse have not yet been verified. Usage may be delayed or rounded, and a prompt sent at the same time as your own activity could be redundant. This tool cannot guarantee a full allowance or an exact reset time.
-
-## Requirements
-
-- Node.js 18 or later and the Codex CLI on `PATH`.
-- A ChatGPT Plus account signed into the CLI (`codex login status`).
-- The computer must stay on while the tool is running.
-
-## Run
-
-From the project directory:
-
-```sh
-node codex-window.js --dry-run
-```
-
-Dry run logs what would happen without sending a prompt. Stop it with `Ctrl+C`, then start the tool:
-
-```sh
-node codex-window.js
-```
-
-Leave it running; stop with `Ctrl+C`. Only one instance can run at a time, including dry run. It does not automatically restart after a reboot.
-
-An unclean shutdown can leave a lock file; if the tool reports a stale lock and no instance is running, delete `~/.local/state/codex-window/node.lock`.
-
-The session ID and timing state are stored in `~/.local/state/codex-window`. Your existing Codex login is used; the tool does not ask for or store your password.
-
-## Install locally with npm
-
-Install from npm and run:
+Requires Node.js 18 or later and the Codex CLI signed in to a ChatGPT Plus account.
 
 ```sh
 npm install -g codex-5h-limit-starter
 codex-5h-limit-starter
 ```
 
-Add `--dry-run` to check without sending a prompt. From a checkout, you can instead run `npm install -g .`.
+Keep it running and stop it with `Ctrl+C`. Your computer must stay on; the tool won't restart after a reboot.
 
-You can also install from GitHub:
+## How it works
 
-```sh
-npm install -g github:bayramn/codex-5h-limit-starter
-```
+The tool reads your usage, sleeps until 30 seconds after the reported reset, and checks again. If the five-hour allowance shows 100% remaining, it sends “Reply OK” in a dedicated Codex session. Otherwise, it waits for the next reset. It also waits when the weekly allowance is exhausted.
+
+Each prompt uses a little allowance and counts toward your weekly limit. **This is experimental:** behavior after a real reset and repeated session use have not yet been verified. Usage can be delayed or rounded, so it cannot guarantee a full allowance or an exact reset time.
+
+The session ID and timing state are saved in `~/.local/state/codex-5h-limit-starter`. If an unclean shutdown leaves a stale lock, stop all instances and delete `node.lock` in that directory.

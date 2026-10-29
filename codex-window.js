@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
-import { mkdir, open, readFile, unlink, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, open, readFile, unlink, writeFile } from 'node:fs/promises';
+import { constants } from 'node:fs';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-const state = join(homedir(), '.local', 'state', 'codex-window');
+const state = join(homedir(), '.local', 'state', 'codex-5h-limit-starter');
+const oldState = join(homedir(), '.local', 'state', 'codex-window');
 const prompt = 'Reply OK. Do not use tools or inspect files.';
 const dryRun = process.argv.includes('--dry-run');
 if (process.argv.slice(2).some(arg => arg !== '--dry-run')) {
@@ -105,6 +107,11 @@ async function main() {
   const cleanup = async () => { await lock.close(); await unlink(lockPath).catch(() => {}); };
   for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => { cleanup().finally(() => process.exit(0)); });
   try {
+    // Preserve the dedicated session and last attempt from releases using the old name.
+    for (const name of ['session', 'last-attempt']) {
+      try { await copyFile(join(oldState, name), join(state, name), constants.COPYFILE_EXCL); }
+      catch (error) { if (!['ENOENT', 'EEXIST'].includes(error.code)) throw error; }
+    }
     const attemptPath = join(state, 'last-attempt');
     let lastAttempt = Number(await readOptional(attemptPath)) || 0;
     for (;;) {
