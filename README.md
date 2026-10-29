@@ -41,7 +41,14 @@ The session ID and timing state are stored in `~/.local/state/codex-window`. You
 
 ## Install locally with npm
 
-From a checkout, run `npm install -g .`, then use `codex-5h-limit-starter` (or add `--dry-run`). The package has not yet been published to npm.
+Install from npm and run:
+
+```sh
+npm install -g codex-5h-limit-starter
+codex-5h-limit-starter
+```
+
+Add `--dry-run` to check without sending a prompt. From a checkout, you can instead run `npm install -g .`.
 
 You can also install from GitHub:
 

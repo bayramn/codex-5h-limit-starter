@@ -1,6 +1,6 @@
 {
   "name": "codex-5h-limit-starter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Start a new Codex five-hour usage window automatically",
   "type": "module",
   "bin": {
