@@ -4,7 +4,7 @@
   "description": "Start a new Codex five-hour usage window automatically",
   "type": "module",
   "bin": {
-    "codex-5h-limit-starter": "./codex-window.js"
+    "codex-5h-limit-starter": "codex-window.js"
   },
   "engines": {
     "node": ">=18"
@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/bayramn/codex-5h-limit-starter.git"
+    "url": "git+https://github.com/bayramn/codex-5h-limit-starter.git"
   },
   "license": "MIT"
 }
